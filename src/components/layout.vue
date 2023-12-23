@@ -11,6 +11,7 @@
 <script setup>
 import NavBar from "./NavBar.vue";
 import SplitText from "./SplitText.vue";
+
 </script>
   
 <style lang="scss" scoped>

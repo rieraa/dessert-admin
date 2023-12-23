@@ -1,48 +1,54 @@
 <template>
   <div class="home-head">
     <div class="logo">
-      <a href="#/" class="router-link-active"
+      <router-link
+        to="/"
+        class="router-link-active"
+        @click="handleNavClick('#')"
         ><img alt="Holiland Logo" lazy="loaded" :src="logo"
-      /></a>
+      /></router-link>
     </div>
     <div class="navigation">
       <div class="header-navigation">
         <div class="header-navigation-item">
-          <a
-            href="#/"
+          <router-link
+            to="/"
             class="router-link-active router-link-exact-active"
             aria-current="page"
             ><div class="text-label">
               <div class="en-title nav-menu">
                 <div class="en-title-inner">
                   HOME
-                  <div class="line showLine"></div>
+                  <div :class="{ showLine: isActive('#') }"></div>
                 </div>
               </div>
               <div class="title">首页</div>
-            </div></a
+            </div></router-link
           >
         </div>
         <div class="header-navigation-item">
-          <a href="#/goods/0" class=""
+          <router-link to="/goods/0" class="" @click="handleNavClick('goods')"
             ><div class="text-label">
               <div class="en-title nav-menu">
                 <div class="en-title-inner">
                   PRODUCTS
-                  <div class="line"></div>
+                  <div :class="{ showLine: isActive('goods') }"></div>
                 </div>
               </div>
               <div class="title">全部产品</div>
-            </div></a
+            </div></router-link
           >
         </div>
         <div class="header-navigation-item">
-          <a href="#/cart" class=""
+          <router-link to="/cart" @click="handleNavClick('cart')"
             ><div class="text-label nav-cart">
               <div class="en-title nav-menu">
                 <div class="en-title-inner">
                   CART
-                  <div class="line"></div>
+                  <div
+                    class="line"
+                    :class="{ showLine: isActive('cart') }"
+                  ></div>
                 </div>
                 <span class="cart-icon"
                   ><div class="el-badge cart-badge no-num">
@@ -60,7 +66,7 @@
                 >
               </div>
               <div class="title">购物车</div>
-            </div></a
+            </div></router-link
           >
         </div>
         <div class="header-navigation-item">
@@ -75,16 +81,16 @@
           </div>
         </div>
         <div class="header-navigation-item">
-          <a href="#/personal" class=""
+          <router-link to="personal" @click="handleNavClick('personal')"
             ><div class="text-label">
               <div class="en-title nav-menu">
                 <div class="en-title-inner">
                   MORE
-                  <div class="line"></div>
+                  <div :class="{ showLine: isActive('personal') }"></div>
                 </div>
               </div>
               <div class="title" title="">个人中心</div>
-            </div></a
+            </div></router-link
           >
         </div>
       </div>
@@ -94,6 +100,18 @@
   
 <script setup>
 import logo from "@/assets/logo.png";
+import { ref } from "vue";
+
+const routePath = ref('#');
+
+function handleNavClick(url) {
+  routePath.value = url;
+}
+
+function isActive(url) {
+  return routePath.value === url;
+}
+
 </script>
   
 <style lang="scss" scoped>
