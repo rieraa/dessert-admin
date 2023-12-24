@@ -12,6 +12,7 @@
       <div class="header-navigation">
         <div class="header-navigation-item">
           <router-link
+            @click="handleNavClick('#')"
             to="/"
             class="router-link-active router-link-exact-active"
             aria-current="page"
