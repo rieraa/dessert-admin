@@ -14,7 +14,7 @@
             placeholder="查询商品"
           >
             <template #suffix>
-              <el-button text="plain"> 搜索 </el-button>
+              <el-button text> 搜索 </el-button>
             </template>
           </el-input>
         </div>

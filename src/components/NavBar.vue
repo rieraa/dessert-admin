@@ -71,15 +71,17 @@
           >
         </div>
         <div class="header-navigation-item">
-          <div class="text-label">
-            <div class="en-title nav-menu">
-              <div class="en-title-inner">
-                SIGN UP/IN
-                <div class="line"></div>
+          <router-link to="/login" @click="handleNavClick('login')">
+            <div class="text-label">
+              <div class="en-title nav-menu">
+                <div class="en-title-inner">
+                  SIGN UP/IN
+                  <div :class="{ showLine: isActive('login') }"></div>
+                </div>
               </div>
+              <div class="title" title="">登录/注册</div>
             </div>
-            <div class="title" title="">登录/注册</div>
-          </div>
+          </router-link>
         </div>
         <div class="header-navigation-item">
           <router-link to="personal" @click="handleNavClick('personal')"
