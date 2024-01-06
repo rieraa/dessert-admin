@@ -1,18 +1,17 @@
 <template>
   <div class="main">
     <div class="split-text split-big">
-      <span>HOLILAND *</span><span>HOLILAND *</span><span>HOLILAND *</span
-      ><span>HOLILAND</span>
+      <span v-for="i in textNum" :key="i">HOLILAND *</span>
+      <span>HOLILAND</span>
     </div>
-    <div class="search">
+    <div v-if="!noSearch" class="search">
       <div class="header-search">
         <div>
           <el-input
             size="large"
             v-model="input"
             :prefix-icon="Search"
-            placeholder="查询商品"
-          >
+            placeholder="查询商品">
             <template #suffix>
               <el-button text> 搜索 </el-button>
             </template>
@@ -22,15 +21,24 @@
     </div>
   </div>
 </template>
-  
+
 <script setup>
 import { ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
+const props = defineProps({
+  noSearch: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+});
 const input = ref('');
+const textNum = props.noSearch ? 4 : 3;
 </script>
-  
+
 <style lang="scss" scoped>
 .main {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
