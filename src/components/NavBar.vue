@@ -83,19 +83,6 @@
             </div>
           </router-link>
         </div>
-        <div class="header-navigation-item">
-          <router-link to="personal" @click="handleNavClick('personal')"
-            ><div class="text-label">
-              <div class="en-title nav-menu">
-                <div class="en-title-inner">
-                  MORE
-                  <div :class="{ showLine: isActive('personal') }"></div>
-                </div>
-              </div>
-              <div class="title" title="">个人中心</div>
-            </div></router-link
-          >
-        </div>
       </div>
     </div>
   </div>

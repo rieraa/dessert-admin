@@ -1,17 +1,13 @@
 <template>
   <div class="main">
     <div class="split-text split-big">
-      <span v-for="i in textNum" :key="i">HOLILAND *</span>
-      <span>HOLILAND</span>
+      <span v-for="i in textNum" :key="i">ZHAOYUXIN *</span>
+      <span>ZHAOYUXIN</span>
     </div>
     <div v-if="!noSearch" class="search">
       <div class="header-search">
         <div>
-          <el-input
-            size="large"
-            v-model="input"
-            :prefix-icon="Search"
-            placeholder="查询商品">
+          <el-input size="large" v-model="input" :prefix-icon="Search" placeholder="查询商品">
             <template #suffix>
               <el-button text> 搜索 </el-button>
             </template>
