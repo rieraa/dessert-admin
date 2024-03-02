@@ -11,6 +11,16 @@ const addOrder = async params => {
   }
 };
 
+const createCartOrder = async params => {
+  try {
+    const { data } = await http.post(`/orders/createCartOrder`, params);
+    return data;
+  } catch (error) {
+    ElMessage.error(`新增订单失败,${error}`);
+    return Promise.reject(error);
+  }
+};
+
 const getOrderList = async () => {
   try {
     const { data } = await http.get(`/orders/getOrderList`);
@@ -21,4 +31,4 @@ const getOrderList = async () => {
   }
 };
 
-export { addOrder, getOrderList };
+export { addOrder, getOrderList, createCartOrder };

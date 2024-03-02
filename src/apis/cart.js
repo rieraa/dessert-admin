@@ -21,9 +21,9 @@ const updateCart = async params => {
   }
 };
 
-const deleteCart = async params => {
+const deleteCart = async cartId => {
   try {
-    const { data } = await http.post(`/cart/deleteCart`, params);
+    const { data } = await http.post(`/cart/deleteCart`, { cartId });
     return data;
   } catch (error) {
     ElMessage.error(`删除购物车失败,${error}`);

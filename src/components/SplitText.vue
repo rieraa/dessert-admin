@@ -9,7 +9,7 @@
         <div>
           <el-input size="large" v-model="input" :prefix-icon="Search" placeholder="查询商品">
             <template #suffix>
-              <el-button text> 搜索 </el-button>
+              <el-button @click="onSearch" text> 搜索 </el-button>
             </template>
           </el-input>
         </div>
@@ -20,6 +20,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { Search } from '@element-plus/icons-vue';
 const props = defineProps({
   noSearch: {
@@ -28,8 +29,13 @@ const props = defineProps({
     default: false,
   },
 });
+const router = useRouter();
 const input = ref('');
 const textNum = props.noSearch ? 4 : 3;
+
+const onSearch = () => {
+  router.replace(`/goods/list?keyWords=${input.value}`);
+};
 </script>
 
 <style lang="scss" scoped>
