@@ -18,12 +18,12 @@ const routes = [
         component: HomeView,
       },
       {
-        path: 'goods/:type',
+        path: 'goods/list',
         name: 'goods',
         component: ProductsView,
       },
       {
-        path: 'goods/:type/:id',
+        path: 'goods/list/:id',
         name: 'good',
         component: ProductView,
       },

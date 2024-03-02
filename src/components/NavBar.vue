@@ -28,7 +28,7 @@
           >
         </div>
         <div class="header-navigation-item">
-          <router-link to="/goods/0" class="" @click="handleNavClick('goods')"
+          <router-link to="/goods/list" class="" @click="handleNavClick('goods')"
             ><div class="text-label">
               <div class="en-title nav-menu">
                 <div class="en-title-inner">
@@ -70,7 +70,7 @@
             </div></router-link
           >
         </div>
-        <div class="header-navigation-item">
+        <div v-if="!isLogin" class="header-navigation-item">
           <router-link to="/login" @click="handleNavClick('login')">
             <div class="text-label">
               <div class="en-title nav-menu">
@@ -80,6 +80,19 @@
                 </div>
               </div>
               <div class="title" title="">登录/注册</div>
+            </div>
+          </router-link>
+        </div>
+        <div v-else class="header-navigation-item">
+          <router-link to="/order" @click="handleNavClick('login')">
+            <div  class="text-label">
+              <div class="en-title nav-menu">
+                <div class="en-title-inner">
+                  {{ userName }}
+                  <div :class="{ showLine: isActive('login') }"></div>
+                </div>
+              </div>
+              <div class="title" title="">个人订单</div>
             </div>
           </router-link>
         </div>
@@ -93,6 +106,9 @@ import logo from "@/assets/logo.png";
 import { ref } from "vue";
 
 const routePath = ref('#');
+
+const isLogin = localStorage.getItem("userName") !== void 0
+const userName = localStorage.getItem("userName");
 
 function handleNavClick(url) {
   routePath.value = url;

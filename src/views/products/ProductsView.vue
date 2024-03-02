@@ -1,50 +1,65 @@
 <template>
   <div class="main">
     <div class="card_list">
-      <div v-for="i in product_total" :key="i" class="product_card">
-        <div class="product_img" @click="handleClick(i)">
+      <div v-for="item in list" :key="item.dessertId" class="product_card">
+        <div class="product_img" @click="handleClick(item.dessertId)">
           <img
             style="cursor: pointer"
-            src="https://p1-cdn-holiland.1900m.com/goods/detail_img_h/202308/11/2922a1691744243b1469.jpg?x-oss-process=image/resize,m_fill,limit_0,w_350,h_300"
+            :src="item.dessertImg"
             alt="" />
         </div>
         <div class="card_info">
           <div class="left">
-            <div class="title">教师节蛋糕-桃李春风</div>
+            <div class="title">{{ item.dessertName }}</div>
             <div class="price">
-              <span class="base-price">¥ 239.00</span><b class="extra">起</b>
+              <span class="base-price">¥ {{ item.dessertPrice }}</span><b class="extra">起</b>
             </div>
           </div>
           <div class="right">
             <div class="button">
-              <el-button @click="handleClick(i)" round>购买</el-button>
+              <el-button @click="handleClick(item.dessertId)" round>购买</el-button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div ref="bottomRef" class="more"></div>
+    <div v-loading="isLoading" ref="bottomRef" class="more">{{ text }}</div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { getAllDessert } from "@/apis/dessert.js";
 
 const router = useRouter();
-const curPage = ref(0);
-const product_total = ref(10);
+const curPage = ref(1);
+const hasMore = ref(true);
+const isLoading = ref(false);
+const list = ref([])
 
 const bottomRef = ref(null);
+
+const text = computed(()=>{
+  return hasMore.value ? '' : '没有更多啦'
+})
 
 const handleClick = (id) => {
   router.push(`${location.pathname}/${id}`);
 };
 
 const observer = new IntersectionObserver(
-  (entries) => {
+  async (entries) => {
     if (entries[0].isIntersecting) {
-      product_total.value += 15;
+      if(hasMore.value){
+        curPage.value = curPage.value + 1
+        isLoading.value = true;
+        const res = await getAllDessert(curPage.value)
+        isLoading.value = false;
+        hasMore.value = res.hasMore;
+        list.value.push(...res.desserts)
+        console.log(res);
+      }
     }
   },
   {
@@ -52,8 +67,13 @@ const observer = new IntersectionObserver(
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
   observer.observe(bottomRef.value);
+  isLoading.value = true;
+  const res = await getAllDessert(curPage.value)
+  isLoading.value = false;
+  list.value = res.desserts;
+  hasMore.value = res.hasMore;
 });
 
 onUnmounted(() => {
@@ -68,9 +88,11 @@ onUnmounted(() => {
     flex-wrap: wrap;
   }
   .more {
+    text-align: center;
     width: 100%;
     height: 30px;
     margin-top: 30px;
+    color: #858585;
   }
 }
 

@@ -23,7 +23,7 @@
                 />
               </el-form-item>
               <el-form-item>
-                <el-button style="width: 100%" type="primary" @click="onSubmit"
+                <el-button style="width: 100%" type="primary" @click="onSubmitLogin"
                   >登录</el-button
                 >
               </el-form-item>
@@ -45,17 +45,17 @@
                 <el-input
                   type="password"
                   autocomplete="off"
-                  v-model="form.password"
+                  v-model="form.checkPassword"
                 />
               </el-form-item>
               <el-form-item label="性别">
                 <el-radio-group v-model="form.userSex">
-                  <el-radio label="男" />
-                  <el-radio label="女" />
+                  <el-radio :value="0" label="男" />
+                  <el-radio :value="1" label="女" />
                 </el-radio-group>
               </el-form-item>
               <el-form-item>
-                <el-button style="width: 100%" type="primary" @click="onSubmit"
+                <el-button style="width: 100%" type="primary" @click="onSubmitRegister"
                   >注册</el-button
                 >
               </el-form-item>
@@ -69,13 +69,20 @@
     
 <script setup>
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router';
+import { register, login } from "@/apis/user.js";
+import { setToken } from '@/utils/auth';
 import bgImg from "@/assets/loginBg.jpg";
+import { ElMessage } from 'element-plus'
 
 const activeName = ref('first')
+const router = useRouter();
+
 let form = ref({
   userName: '',
   password: '',
-  userSex: '男'
+  checkPassword: '',
+  userSex: 0
 });
 
 const rules = reactive({
@@ -94,14 +101,35 @@ const handleClick = (tab) => {
     form.value = {
       userName: '',
       password: '',
-      userSex: '男'
+      checkPassword: '',
+      userSex: 0
     };
   }
 
 }
 
-const onSubmit = () => {
-  console.log('submit!')
+const onSubmitLogin = async () => {
+  const res = await login(form.value);
+  console.log(res);
+  ElMessage.success('登录成功');
+  setToken(res.token);
+  localStorage.setItem('userName', res.userName);
+  router.push('/');
+}
+
+const onSubmitRegister = async() => {
+  const res = await register(form.value);
+  console.log(res);
+  if(res){
+    ElMessage.success('注册成功');
+    activeName.value = 'first'
+    form.value = {
+      userName: '',
+      password: '',
+      checkPassword: '',
+      userSex: 0
+    };
+  }
 }
 </script>
     
