@@ -162,7 +162,7 @@ const onConfirm = async () => {
 };
 
 const addToCart = async () => {
-  await updateCart(fromData);
+  await updateCart(fromData.value);
   ElMessage.success('添加成功');
 };
 
