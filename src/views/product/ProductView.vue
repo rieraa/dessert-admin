@@ -42,7 +42,7 @@
               <div class="title">送至</div>
               <div class="content">
                 <span class="to-address">{{ getAddressText }}</span
-                ><el-button type="text" @click="dialogVisible = true" class="text-button"><span>更改</span></el-button>
+                ><el-button type="text" @click="onClickSelectAddress" class="text-button"><span>更改</span></el-button>
               </div>
             </div>
             <div style="display: flex; align-items: center">
@@ -80,6 +80,7 @@
 
     <SplitText :noSearch="true" />
     <AddressDialog
+      v-if="isLogin"
       @confirm="onAddressComfirm"
       @close="dialogVisible = false"
       :dialogVisible="dialogVisible"
@@ -90,7 +91,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import AddressDialog from './components/AddressDialog.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { getDessertById } from '@/apis/dessert.js';
 import { addOrder } from '@/apis/order.js';
 import { updateCart } from '@/apis/cart.js';
@@ -99,6 +100,9 @@ import { getCurrentDateTime } from '@/utils/time.js';
 import SplitText from '@/components/SplitText.vue';
 
 const route = useRoute();
+const router = useRouter();
+
+const isLogin = ref(!!localStorage.getItem('userName'));
 const dessertInfo = ref({});
 
 const dialogVisible = ref(false);
@@ -120,6 +124,13 @@ const getAddressText = computed(() => {
     ? `收货人：${currentAddress.value.contactName} 地址：${currentAddress.value.address}`
     : '请先选择地址';
 });
+
+const onClickSelectAddress = () => {
+  if (!isLogin.value) {
+    ElMessage.warning('请先登录再进行操作');
+    router.push('/login');
+  } else dialogVisible = true;
+};
 
 const onUpdateQuantity = type => {
   if (type === 'min' && fromData.value.quantity > 1) {

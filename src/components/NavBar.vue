@@ -37,7 +37,7 @@
             </div></router-link
           >
         </div>
-        <div class="header-navigation-item">
+        <div v-if="isLogin" class="header-navigation-item">
           <router-link to="/cart" @click="handleNavClick('cart')"
             ><div class="text-label nav-cart">
               <div class="en-title nav-menu">
@@ -76,6 +76,9 @@
             </div>
           </router-link>
         </div>
+        <div v-if="isLogin" style="font-size: 14px; margin-left: 5px">
+          <el-button @click="loginOut" text> 退出登录 </el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -83,14 +86,29 @@
 
 <script setup>
 import logo from '@/assets/logo.png';
+import { clearToken } from '@/utils/auth';
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const routePath = ref('#');
+const router = useRouter();
 const route = useRoute();
 
-const isLogin = localStorage.getItem('userName') !== void 0;
+const isLogin = ref(!!localStorage.getItem('userName'));
 const userName = localStorage.getItem('userName');
+
+const loginOut = () => {
+  isLogin.value = false;
+  clearToken();
+  router.push('/');
+};
+
+watch(
+  () => localStorage.getItem('userName'),
+  () => {
+    isLogin.value = !!localStorage.getItem('userName');
+  }
+);
 
 function handleNavClick(url) {
   routePath.value = url;
