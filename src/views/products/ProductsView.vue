@@ -1,18 +1,16 @@
 <template>
   <div class="main">
     <div class="card_list">
-      <div v-for="item in list" :key="item.dessertId" class="product_card">
+      <div v-for="item in filterList" :key="item.dessertId" class="product_card">
         <div class="product_img" @click="handleClick(item.dessertId)">
-          <img
-            style="cursor: pointer"
-            :src="item.dessertImg"
-            alt="" />
+          <img style="cursor: pointer" :src="item.dessertImg" alt="" />
         </div>
         <div class="card_info">
           <div class="left">
             <div class="title">{{ item.dessertName }}</div>
             <div class="price">
-              <span class="base-price">¥ {{ item.dessertPrice }}</span><b class="extra">起</b>
+              <span class="base-price">¥ {{ item.dessertPrice }}</span
+              ><b class="extra">起</b>
             </div>
           </div>
           <div class="right">
@@ -28,36 +26,52 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { getAllDessert } from "@/apis/dessert.js";
+import { onMounted, onUnmounted, ref, computed, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { getAllDessert } from '@/apis/dessert.js';
 
 const router = useRouter();
+const route = useRoute();
 const curPage = ref(1);
 const hasMore = ref(true);
 const isLoading = ref(false);
-const list = ref([])
+const list = ref([]);
 
 const bottomRef = ref(null);
+const keyWords = ref(route.query.keyWords || '');
 
-const text = computed(()=>{
-  return hasMore.value ? '' : '没有更多啦'
-})
+const text = computed(() => {
+  return hasMore.value ? '' : '没有更多啦';
+});
 
-const handleClick = (id) => {
+const filterList = computed(() => {
+  console.log('keyWords', keyWords);
+  return list.value.filter(item => {
+    return item.dessertName.includes(keyWords.value) || item.dessertExplain.includes(keyWords.value);
+  });
+});
+
+const handleClick = id => {
   router.push(`${location.pathname}/${id}`);
 };
 
+watch(
+  () => route.query,
+  () => {
+    keyWords.value = route.query.keyWords || '';
+  }
+);
+
 const observer = new IntersectionObserver(
-  async (entries) => {
+  async entries => {
     if (entries[0].isIntersecting) {
-      if(hasMore.value){
-        curPage.value = curPage.value + 1
+      if (hasMore.value) {
+        curPage.value = curPage.value + 1;
         isLoading.value = true;
-        const res = await getAllDessert(curPage.value)
+        const res = await getAllDessert(curPage.value);
         isLoading.value = false;
         hasMore.value = res.hasMore;
-        list.value.push(...res.desserts)
+        list.value.push(...res.desserts);
         console.log(res);
       }
     }
@@ -70,7 +84,7 @@ const observer = new IntersectionObserver(
 onMounted(async () => {
   observer.observe(bottomRef.value);
   isLoading.value = true;
-  const res = await getAllDessert(curPage.value)
+  const res = await getAllDessert(curPage.value);
   isLoading.value = false;
   list.value = res.desserts;
   hasMore.value = res.hasMore;

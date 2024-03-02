@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { createCartOrder } from '@/apis/order.js';
 import { updateCart, getCartList, deleteCart } from '@/apis/cart.js';
 import { ElMessage } from 'element-plus';
