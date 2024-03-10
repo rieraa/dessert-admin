@@ -114,7 +114,7 @@ const onSubmitLogin = async () => {
   ElMessage.success('登录成功');
   setToken(res.token);
   localStorage.setItem('userName', res.userName);
-  router.push('/');
+  location.replace('/')
 }
 
 const onSubmitRegister = async() => {
