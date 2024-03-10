@@ -2,7 +2,7 @@
   <div class="home-main">
     <el-carousel height="520px">
       <el-carousel-item v-for="item in imgUrl" :key="item">
-        <img :src="item" alt="" />
+        <img @click="onClick" :src="item" alt="" />
       </el-carousel-item>
     </el-carousel>
     <div class="brand-intro">
@@ -15,9 +15,16 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router";
 import img1 from "@/assets/carousel/1.jpg";
 import img2 from "@/assets/carousel/2.jpg";
 import img3 from "@/assets/carousel/3.jpg";
+
+const router = useRouter();
+
+const onClick = ()=>{
+  router.push('/goods/list')
+}
 
 const imgUrl = [img1, img2, img3];
 </script>
